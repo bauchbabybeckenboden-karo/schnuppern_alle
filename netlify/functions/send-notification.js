@@ -1,6 +1,6 @@
 const RESEND_API_URL = 'https://api.resend.com/emails';
-const ABSENDER      = 'Karo · Bauch · Baby · Beckenboden <onboarding@resend.dev>';
-const KAROLINE_MAIL = 'bauch.baby.beckenboden@gmail.com';
+const ABSENDER      = 'Karo · Bauch · Baby · Beckenboden <kontakt@bauch-baby-beckenboden.com>';
+const KAROLINE_MAIL = 'kontakt@bauch-baby-beckenboden.com';
 
 // Allgemeine Fragebogen-Typen (fuer andere Pakete/Projekte mitgenutzt)
 const KURS_TITEL = {
