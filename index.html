@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fragebogen – Schnupperstunde</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>emailjs.init("11LHuzWy1ssGFyY8Q");</script>
+  <style>
+    :root {
+      --sand: #f7f2ee;
+      --clay: #c4a882;
+      --earth: #7a5c4a;
+      --deep: #5c2d2d;
+      --sage: #8a7060;
+      --rose: #b87060;
+      --mist: #ede5dc;
+      --ink: #2a1a1a;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--sand);
+      font-family: 'Jost', sans-serif;
+      color: var(--ink);
+      min-height: 100vh;
+      padding: 0 0 80px;
+    }
+
+    /* Header */
+    .header {
+      background: #7a3f3f;
+      color: var(--sand);
+      padding: 50px 40px 44px;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,169,138,0.18) 0%, transparent 70%);
+    }
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; left: 30%;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(196,135,122,0.12) 0%, transparent 70%);
+    }
+    .header-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    .header-eyebrow {
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 18px;
+    }
+    .header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(30px, 5vw, 46px);
+      line-height: 1.15;
+      color: var(--sand);
+      margin-bottom: 20px;
+    }
+    .header h1 em {
+      color: var(--clay);
+      font-style: italic;
+    }
+    .header-subtitle {
+      font-size: 14px;
+      font-weight: 300;
+      color: rgba(245,240,232,0.65);
+      max-width: 520px;
+      line-height: 1.7;
+    }
+
+    /* Logo */
+    .logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 32px;
+    }
+    .logo-img {
+      height: 76px;
+      width: auto;
+      flex-shrink: 0;
+    }
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .logo-main {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 400;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+    .logo-sub {
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+    }
+
+    /* Safety notice */
+    .notice {
+      max-width: 760px;
+      margin: 36px auto 0;
+      padding: 0 24px;
+    }
+    .notice-box {
+      background: rgba(125,145,134,0.12);
+      border-left: 3px solid var(--sage);
+      border-radius: 0 8px 8px 0;
+      padding: 18px 22px;
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--earth);
+      line-height: 1.7;
+    }
+    .notice-box strong {
+      font-weight: 500;
+      color: var(--sage);
+      display: block;
+      margin-bottom: 4px;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    /* Form layout */
+    .form-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Section */
+    .section {
+      margin-top: 48px;
+    }
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .section-num {
+      background: var(--deep);
+      color: var(--clay);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-style: italic;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: 22px;
+      color: var(--deep);
+    }
+
+    /* Question card */
+    .q-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin-bottom: 16px;
+      border: 1px solid var(--mist);
+      transition: border-color 0.2s;
+    }
+    .q-card:focus-within {
+      border-color: var(--clay);
+    }
+    .q-label {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--deep);
+      margin-bottom: 14px;
+      line-height: 1.6;
+    }
+    .q-hint {
+      font-size: 12px;
+      color: var(--earth);
+      font-weight: 300;
+      margin-top: -10px;
+      margin-bottom: 12px;
+      font-style: italic;
+    }
+
+    /* Radio / Checkbox group */
+    .radio-group, .check-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .radio-group.column, .check-group.column {
+      flex-direction: column;
+      gap: 8px;
+    }
+    .r-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--ink);
+      padding: 9px 16px;
+      border: 1.5px solid var(--mist);
+      border-radius: 100px;
+      background: var(--sand);
+      transition: all 0.15s;
+      user-select: none;
+    }
+    /* Accessible hidden input — keeps element in DOM flow for keyboard / screenreaders */
+    .r-option input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .r-option:hover { border-color: var(--clay); background: #fdf9f5; }
+    .r-option.selected {
+      border-color: var(--clay);
+      background: rgba(201,169,138,0.15);
+      color: var(--deep);
+      font-weight: 400;
+    }
+    .r-dot {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      border: 1.5px solid var(--clay);
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .r-option.selected .r-dot::after {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--clay);
+    }
+    .c-dot {
+      width: 14px; height: 14px;
+      border-radius: 3px;
+      border: 1.5px solid var(--clay);
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .r-option.selected .c-dot {
+      background: var(--clay);
+    }
+    .r-option.selected .c-dot::after {
+      content: '✓';
+      color: #fff;
+      font-size: 9px;
+      line-height: 1;
+    }
+
+    /* Text input */
+    textarea, input[type="text"], input[type="email"], input[type="tel"], input[type="date"], input[type="number"] {
+      width: 100%;
+      font-family: 'Jost', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--ink);
+      background: var(--sand);
+      border: 1.5px solid var(--mist);
+      border-radius: 8px;
+      padding: 12px 16px;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    textarea:focus, input:focus {
+      border-color: var(--clay);
+    }
+    textarea { min-height: 80px; }
+
+    /* Inline date + text row */
+    .inline-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .inline-row > * { flex: 1; min-width: 140px; }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--mist);
+      margin: 52px 0 0;
+    }
+
+    /* Submit */
+    .submit-wrap {
+      max-width: 760px;
+      margin: 52px auto 0;
+      padding: 0 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .submit-note {
+      font-size: 12px;
+      color: var(--earth);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.6;
+    }
+    .btn-submit {
+      background: var(--deep);
+      color: var(--sand);
+      border: none;
+      padding: 16px 48px;
+      border-radius: 100px;
+      font-family: 'Jost', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-submit:hover { background: var(--earth); }
+    .btn-submit:active { transform: scale(0.98); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* Thank you */
+    #thank-you {
+      display: none;
+      max-width: 760px;
+      margin: 60px auto;
+      padding: 0 24px;
+      text-align: center;
+    }
+    #thank-you .ty-icon {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+    #thank-you h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      font-weight: 300;
+      color: var(--deep);
+      margin-bottom: 14px;
+    }
+    #thank-you p {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--earth);
+      line-height: 1.8;
+    }
+
+    @media (max-width: 560px) {
+      .header { padding: 40px 20px 36px; }
+      .q-card { padding: 18px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="logo-wrap">
+      <img src="logo.png" alt="Bauch · Baby · Beckenboden Logo" class="logo-img" />
+      <div class="logo-text">
+        <span class="logo-main">Bauch · Baby · Beckenboden</span>
+        <span class="logo-sub">alle Kurse</span>
+      </div>
+    </div>
+    <p class="header-eyebrow">Vertraulicher Fragebogen</p>
+    <h1>Vielen Dank –<br><em>für dein Interesse an einer Schnupperstunde</em></h1>
+    <p class="header-subtitle">Hier kannst Du mich wissen lassen, in welchem Kurs du gerne schnuppern möchtest & wann es für Dich passt.</p>
+  </div>
+</header>
+
+<div class="notice">
+  <div class="notice-box">
+    <strong>Hinweis zur Sicherheit</strong>
+    Die Informationen, die Du mir hier gibst, werden nicht durch mich an Dritte weitergegeben.
+  </div>
+</div>
+
+<form id="main-form" class="form-wrap" onsubmit="handleSubmit(event)">
+
+  <!-- ── SECTION 1: Persönliches ── -->
+  <div class="section">
+    <div class="section-label">
+      <div class="section-num">1</div>
+      <h2 class="section-title">Persönliche Angaben</h2>
+    </div>
+
+    <div class="q-card">
+      <p class="q-label">Dein Name? <span style="color:var(--rose)">*</span></p>
+      <input type="text" id="f-name" placeholder="Vor- & Nachname" />
+    </div>
+
+    <div class="q-card">
+      <p class="q-label">Wie kann ich dich erreichen? <span style="color:var(--rose)">*</span></p>
+      <div class="inline-row" style="margin-bottom:12px">
+        <div>
+          <p style="font-size:12px;color:var(--earth);margin-bottom:6px;font-weight:300">E-Mail-Adresse <span style="color:var(--rose)">*</span></p>
+          <input type="email" id="f-email" placeholder="deine@email.de" />
+        </div>
+        <div>
+          <p style="font-size:12px;color:var(--earth);margin-bottom:6px;font-weight:300">Telefonnummer <span style="color:var(--rose)">*</span></p>
+          <input type="tel" id="f-telefon" placeholder="+49 …" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ── SECTION 2: Kursabfrage ── -->
+  <div class="section">
+    <div class="section-label">
+      <div class="section-num">2</div>
+      <h2 class="section-title">Kursabfrage</h2>
+    </div>
+
+    <div class="q-card">
+      <p class="q-label">In welchem der Kurse möchtest Du gern schnuppern?</p>
+      <p class="q-hint">Sowohl bei Mamafit als auch bei allen Somatic-Kursen ist es sinnvoll, 2 Termine zu schnuppern: Du (beim Mamafit auch Dein Baby) könnt euch beim ersten Mal erst einmal eingrooven, bevor es in der zweiten Stunde ums Entscheiden geht. Bei der somatischen Arbeit ist das Nervensystem beim ersten Mal oft etwas aufgeregt – viele können sich erst in der 2. Stunde wirklich einlassen. (kein Muss)</p>
+      <div class="radio-group column" id="kurs-group">
+        <label class="r-option" onclick="selectRadio(event, this, 'kurs-group')">
+          <input type="radio" name="kurs" value="schwangerfit" /><span class="r-dot"></span>Schwangerfit
+        </label>
+        <label class="r-option" onclick="selectRadio(event, this, 'kurs-group')">
+          <input type="radio" name="kurs" value="mamafit_2termine" /><span class="r-dot"></span>Mamafit (2 Termine)
+        </label>
+        <label class="r-option" onclick="selectRadio(event, this, 'kurs-group')">
+          <input type="radio" name="kurs" value="mamafit_1termin" /><span class="r-dot"></span>Mamafit (1 Termin)
+        </label>
+        <label class="r-option" onclick="selectRadio(event, this, 'kurs-group')">
+          <input type="radio" name="kurs" value="somatic_koerpermitte_2termine" /><span class="r-dot"></span>Somatic Körpermitte & Beckenboden (2 Termine)
+        </label>
+        <label class="r-option" onclick="selectRadio(event, this, 'kurs-group')">
+          <input type="radio" name="kurs" value="somatic_koerpermitte_1termin" /><span class="r-dot"></span>Somatic Körpermitte & Beckenboden (1 Termin)
+        </label>
+        <label class="r-option" onclick="selectRadio(event, this, 'kurs-group')">
+          <input type="radio" name="kurs" value="somatic_yoga_2termine" /><span class="r-dot"></span>Somatic Yoga (2 Termine)
+        </label>
+        <label class="r-option" onclick="selectRadio(event, this, 'kurs-group')">
+          <input type="radio" name="kurs" value="somatic_yoga_1termin" /><span class="r-dot"></span>Somatic Yoga (1 Termin)
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ── SECTION 3: Terminfindung ── -->
+  <div class="section">
+    <div class="section-label">
+      <div class="section-num">3</div>
+      <h2 class="section-title">Terminfindung</h2>
+    </div>
+
+    <div class="q-card">
+      <p class="q-label">Wann passt es Dir? <span style="color:var(--rose)">*</span></p>
+      <p class="q-hint">Momentan finden die Kurse wie folgt statt: Schwangerfit montagabends; Mamafit freitags & evtl. donnerstagvormittags; Somatic Yoga donnerstagabends (nicht für Schwangere oder Mütter bis 6 Monate postnatal); Somatic Körpermitte & Beckenboden montagabends, ebenfalls ohne Kinder. In den hessischen Schulferien finden keine Kurse statt.</p>
+      <div class="radio-group column" id="termin-group">
+        <label class="r-option" onclick="selectRadio(event, this, 'termin-group')">
+          <input type="radio" name="termin" value="asap" /><span class="r-dot"></span>So schnell wie möglich (gerne spontan 🤗)
+        </label>
+        <label class="r-option" onclick="selectRadio(event, this, 'termin-group')">
+          <input type="radio" name="termin" value="2-4-wochen" /><span class="r-dot"></span>In den nächsten 2–4 Wochen
+        </label>
+        <label class="r-option" onclick="selectRadio(event, this, 'termin-group')">
+          <input type="radio" name="termin" value="4-6-wochen" /><span class="r-dot"></span>In den nächsten 4–6 Wochen
+        </label>
+        <label class="r-option" onclick="selectRadio(event, this, 'termin-group')">
+          <input type="radio" name="termin" value="flexibel" /><span class="r-dot"></span>Ich richte mich nach Dir
+        </label>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <p class="q-label">Gibt es körperliche Probleme oder ein Sportverbot? (z. B. Symphysenschmerzen) <span style="color:var(--rose)">*</span></p>
+      <p class="q-hint">Falls Du diese Frage mit Ja beantwortest, nimm bitte vor unserer gemeinsamen Stunde gern Kontakt mit mir auf.</p>
+      <div class="radio-group" id="sportverbot-group">
+        <label class="r-option" onclick="selectRadio(event, this, 'sportverbot-group')">
+          <input type="radio" name="sportverbot" value="ja" /><span class="r-dot"></span>Ja
+        </label>
+        <label class="r-option" onclick="selectRadio(event, this, 'sportverbot-group')">
+          <input type="radio" name="sportverbot" value="nein" /><span class="r-dot"></span>Nein
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ── SECTION 4: Über dich ── -->
+  <div class="section">
+    <div class="section-label">
+      <div class="section-num">4</div>
+      <h2 class="section-title">Über dich</h2>
+    </div>
+
+    <div class="q-card">
+      <p class="q-label">Welches Lied liebst Du? <span style="color:var(--rose)">*</span></p>
+      <input type="text" id="f-lied" placeholder="Titel und Künstler:in (oder einfach das, woran du gerade denkst)" />
+    </div>
+
+    <div class="q-card">
+      <p class="q-label">Wie bist Du auf mich aufmerksam geworden? <span style="color:var(--rose)">*</span></p>
+      <textarea id="f-aufmerksam" placeholder="z. B. Empfehlung, Instagram, Hebamme, Google …" style="min-height:60px"></textarea>
+    </div>
+
+    <div class="q-card">
+      <p class="q-label">Möchtest Du mir etwas mitteilen?</p>
+      <textarea id="f-wuensche" placeholder="Raum für alles, was dir wichtig ist …" style="min-height:110px"></textarea>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ── SECTION 5: Datenschutz ── -->
+  <div class="section">
+    <div class="section-label">
+      <div class="section-num">5</div>
+      <h2 class="section-title">Einverständnis</h2>
+    </div>
+
+    <div class="q-card">
+      <p class="q-label">Ich bestätige, dass meine Angaben freiwillig gemacht werden und vertraulich behandelt werden. <span style="color:var(--rose)">*</span></p>
+      <div class="check-group column" id="consent-group">
+        <label class="r-option" onclick="selectCheck(event, this)">
+          <input type="checkbox" name="consent" value="dsgvo" /><span class="c-dot"></span>Ich habe die <a href="https://www.bauch-baby-beckenboden.de/datenschutz/" target="_blank" style="color:var(--rose);text-decoration:underline;display:inline;">Datenschutzerklärung</a> gelesen und willige ein.
+        </label>
+        <label class="r-option" onclick="selectCheck(event, this)">
+          <input type="checkbox" name="consent" value="notiz" /><span class="c-dot"></span>Ich bin damit einverstanden, dass meine Angaben in anonymisierter Form für die Stundenplanung genutzt werden
+        </label>
+        <label class="r-option" onclick="selectCheck(event, this)">
+          <input type="checkbox" name="consent" value="antirassismus" /><span class="c-dot"></span>Mir ist bewusst, dass in den Kursen kein Platz für Rassismus und Ausgrenzung ist
+        </label>
+      </div>
+    </div>
+  </div>
+
+</form>
+
+<div class="submit-wrap">
+  <p class="submit-note">Deine Angaben werden vertraulich behandelt und nicht an Dritte weitergegeben.</p>
+  <button class="btn-submit" id="submit-btn" onclick="handleSubmit(event)">Fragebogen absenden</button>
+</div>
+
+<div id="thank-you">
+  <div class="ty-icon">🌿</div>
+  <h2>Herzlichen Dank.</h2>
+  <p style="margin-bottom:20px">Ich freue mich sehr auf unsere gemeinsame Zeit und darauf, dich auf deinem Weg zu begleiten.<br>Ich melde mich in Kürze bei dir.</p>
+  <p style="font-size:13px; color:var(--earth); font-style:italic; max-width:480px; margin:0 auto; line-height:1.85;">Bauch · Baby · Beckenboden ist ein liebevoller Raum, in dem Bewegung, Verbindung und Stärke zusammenkommen. 🤍</p>
+</div>
+
+<script>
+  // ── Supabase config ──
+  const SUPABASE_URL = 'https://lmeegdgilhlqvvmjaplz.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_GfKiifprgerRP37B9-VHiQ_3kl_6T6M';
+
+  // Netlify-Function-Endpunkt fuer den Mailversand
+  // (Resend-Key liegt sicher in den Netlify Environment Variables)
+  const NOTIFY_ENDPOINT = '/.netlify/functions/send-notification';
+
+  // ── Selection logic ──
+  // Radios: explicitly set the input checked state and visual class
+  function selectRadio(e, el, groupId) {
+    if (e) e.preventDefault();
+    const input = el.querySelector('input[type="radio"]');
+    if (!input) return;
+    document.querySelectorAll('#' + groupId + ' .r-option').forEach(o => o.classList.remove('selected'));
+    input.checked = true;
+    el.classList.add('selected');
+  }
+
+  // Checkboxes: explicitly toggle the input checked state and visual class
+  function selectCheck(e, el) {
+    if (e) e.preventDefault();
+    const input = el.querySelector('input[type="checkbox"]');
+    if (!input) return;
+    input.checked = !input.checked;
+    el.classList.toggle('selected', input.checked);
+  }
+
+  // ── Submit ──
+  function getValue(id) {
+    const el = document.getElementById(id);
+    return el ? el.value.trim() : '';
+  }
+
+  function getRadio(name) {
+    const el = document.querySelector('input[name="' + name + '"]:checked');
+    return el ? el.value : '';
+  }
+
+  function getChecked(name) {
+    return Array.from(document.querySelectorAll('input[name="' + name + '"]:checked'))
+      .map(i => i.value)
+      .join(', ');
+  }
+
+  async function saveToSupabase(data) {
+    return fetch(SUPABASE_URL + '/rest/v1/fragebogen_antworten', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify(data)
+    });
+  }
+
+  // Mail an Karoline ueber die Netlify Function ausloesen.
+  // Fehler werden geloggt aber nicht dem User angezeigt: die Antwort
+  // ist in Supabase gespeichert, das ist die Quelle der Wahrheit.
+  async function sendNotification(data) {
+    try {
+      const res = await fetch(NOTIFY_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (!res.ok) {
+        const err = await res.text();
+        console.warn('Mail-Versand fehlgeschlagen:', err);
+      }
+    } catch (err) {
+      console.warn('Mail-Versand-Netzwerkfehler:', err);
+    }
+  }
+
+  async function handleSubmit(e) {
+    if (e) e.preventDefault();
+
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+
+    // ── Pflichtfeld-Validierung ──
+    const fehler = [];
+    if (!getValue('f-name')) fehler.push('Dein Name (Abschnitt 1)');
+    if (!getValue('f-email')) fehler.push('E-Mail-Adresse (Abschnitt 1)');
+    if (!getValue('f-telefon')) fehler.push('Telefonnummer (Abschnitt 1)');
+    if (!getRadio('termin')) fehler.push('Terminwunsch (Abschnitt 3)');
+    if (!getRadio('sportverbot')) fehler.push('Frage zu körperlichen Problemen / Sportverbot (Abschnitt 3)');
+    if (!getValue('f-lied')) fehler.push('Lieblingslied (Abschnitt 4)');
+    if (!getValue('f-aufmerksam')) fehler.push('Wie bist Du auf mich aufmerksam geworden? (Abschnitt 4)');
+    const consentChecked = Array.from(document.querySelectorAll('input[name="consent"]:checked')).map(i => i.value);
+    if (!consentChecked.includes('dsgvo')) fehler.push('Datenschutzerklärung bestätigen (Abschnitt 5)');
+    if (!consentChecked.includes('antirassismus')) fehler.push('Antirassismus-Bestätigung (Abschnitt 5)');
+    if (fehler.length > 0) {
+      alert('Bitte fülle noch folgende Pflichtfelder aus:\n\n• ' + fehler.join('\n• '));
+      btn.disabled = false;
+      return;
+    }
+
+    // Felder, die bereits als Spalten in der geteilten Supabase-Tabelle
+    // "fragebogen_antworten" existieren (wird auch von anderen
+    // Fragebogen-Varianten genutzt). Spalten, die fuer den
+    // Schnupperbogen nicht zutreffen, bleiben hier bewusst leer.
+    const supabaseData = {
+      eingereicht_am: new Date().toISOString(),
+      name: getValue('f-name'),
+      email: getValue('f-email'),
+      telefon: getValue('f-telefon'),
+      motivation: '',
+      beschwerden: '',
+      medikamente: '',
+      becken_beschwerden: '',
+      entbunden: '',
+      wuensche: getValue('f-wuensche'),
+      einverstaendnis: getChecked('consent')
+    };
+
+    // Schnupperbogen-spezifische Felder: gehen nur an die Mail, NICHT an
+    // Supabase, weil dafuer noch keine eigenen Spalten existieren.
+    const schnupperExtras = {
+      kurs: getRadio('kurs'),
+      termin: getRadio('termin'),
+      sportverbot: getRadio('sportverbot'),
+      lied: getValue('f-lied'),
+      aufmerksam_geworden: getValue('f-aufmerksam')
+    };
+
+    try {
+      const res = await saveToSupabase(supabaseData);
+      if (res.ok || res.status === 201) {
+        // Mail bekommt alle Felder plus den Fragebogen-Typ.
+        await sendNotification({ ...supabaseData, ...schnupperExtras, fragebogen_typ: 'schnupperbogen' });
+
+        // Die automatische Packlisten-Mail passt inhaltlich nur zu Mamafit
+        // (Baby, Wegbeschreibung zum Mamafit-Kurs) - daher nur verschicken,
+        // wenn auch tatsächlich ein Mamafit-Termin gewählt wurde.
+        if (schnupperExtras.kurs && schnupperExtras.kurs.startsWith('mamafit')) {
+          await emailjs.send('service_ovlsivg', 'template_xlta9za', {
+            name: supabaseData.name,
+            email: supabaseData.email,
+            packliste_link: 'https://www.bauch-baby-beckenboden.de/mama/deine-packliste-und-wegbeschreibung/'
+          }).then(() => console.log('EmailJS OK')).catch(err => console.error('EmailJS Fehler:', JSON.stringify(err)));
+        }
+
+        document.getElementById('main-form').style.display = 'none';
+        document.querySelector('.submit-wrap').style.display = 'none';
+        document.querySelector('.notice').style.display = 'none';
+        document.getElementById('thank-you').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        const err = await res.text();
+        console.error('Supabase Fehler:', err);
+        alert('Es gab einen Fehler beim Speichern. Bitte versuche es erneut.');
+        btn.disabled = false;
+      }
+    } catch (err) {
+      console.error('Netzwerkfehler:', err);
+      alert('Verbindungsfehler. Bitte prüfe deine Internetverbindung und versuche es erneut.');
+      btn.disabled = false;
+    }
+  }
+</script>
+
+</body>
+</html>
