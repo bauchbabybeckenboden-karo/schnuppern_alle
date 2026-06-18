@@ -586,6 +586,17 @@
   // (Resend-Key liegt sicher in den Netlify Environment Variables)
   const NOTIFY_ENDPOINT = '/.netlify/functions/send-notification';
 
+  // Anzeigenamen fuer die Kurswahl (fuer die Bestaetigungsmail an die Teilnehmerin)
+  const KURS_NAMEN = {
+    schwangerfit: 'Schwangerfit',
+    mamafit_2termine: 'Mamafit (2 Termine)',
+    mamafit_1termin: 'Mamafit (1 Termin)',
+    somatic_koerpermitte_2termine: 'Somatic Körpermitte & Beckenboden (2 Termine)',
+    somatic_koerpermitte_1termin: 'Somatic Körpermitte & Beckenboden (1 Termin)',
+    somatic_yoga_2termine: 'Somatic Yoga (2 Termine)',
+    somatic_yoga_1termin: 'Somatic Yoga (1 Termin)',
+  };
+
   // ── Selection logic ──
   // Radios: explicitly set the input checked state and visual class
   function selectRadio(e, el, groupId) {
@@ -713,16 +724,12 @@
         // Mail bekommt alle Felder plus den Fragebogen-Typ.
         await sendNotification({ ...supabaseData, ...schnupperExtras, fragebogen_typ: 'schnupperbogen' });
 
-        // Die automatische Packlisten-Mail passt inhaltlich nur zu Mamafit
-        // (Baby, Wegbeschreibung zum Mamafit-Kurs) - daher nur verschicken,
-        // wenn auch tatsächlich ein Mamafit-Termin gewählt wurde.
-        if (schnupperExtras.kurs && schnupperExtras.kurs.startsWith('mamafit')) {
-          await emailjs.send('service_lziomtl', 'template_e4gfpzp', {
-            name: supabaseData.name,
-            email: supabaseData.email,
-            packliste_link: 'https://www.bauch-baby-beckenboden.de/mama/deine-packliste-und-wegbeschreibung/'
-          }).then(() => console.log('EmailJS OK')).catch(err => console.error('EmailJS Fehler:', JSON.stringify(err)));
-        }
+        // Automatische Bestätigungsmail an die Teilnehmerin (alle Kurse).
+        await emailjs.send('service_lziomtl', 'template_e4gfpzp', {
+          to_name: supabaseData.name,
+          email: supabaseData.email,
+          umfrage_titel: KURS_NAMEN[schnupperExtras.kurs] || 'Schnupperstunde'
+        }).then(() => console.log('EmailJS OK')).catch(err => console.error('EmailJS Fehler:', JSON.stringify(err)));
 
         document.getElementById('main-form').style.display = 'none';
         document.querySelector('.submit-wrap').style.display = 'none';
