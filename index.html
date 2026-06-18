@@ -6,7 +6,7 @@
   <title>Fragebogen – Schnupperstunde</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script>emailjs.init("11LHuzWy1ssGFyY8Q");</script>
+  <script>emailjs.init("FBZv2NHZrCtRauTWD");</script>
   <style>
     :root {
       --sand: #f7f2ee;
@@ -717,7 +717,7 @@
         // (Baby, Wegbeschreibung zum Mamafit-Kurs) - daher nur verschicken,
         // wenn auch tatsächlich ein Mamafit-Termin gewählt wurde.
         if (schnupperExtras.kurs && schnupperExtras.kurs.startsWith('mamafit')) {
-          await emailjs.send('service_ovlsivg', 'template_xlta9za', {
+          await emailjs.send('service_lziomtl', 'template_e4gfpzp', {
             name: supabaseData.name,
             email: supabaseData.email,
             packliste_link: 'https://www.bauch-baby-beckenboden.de/mama/deine-packliste-und-wegbeschreibung/'
