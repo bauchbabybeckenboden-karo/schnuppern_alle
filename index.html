@@ -442,7 +442,7 @@
       <h2 class="section-title">Kursabfrage</h2>
     </div>
 
-    <div class="q-card">
+      <div class="q-card">
       <p class="q-label">In welchem der Kurse möchtest Du gern schnuppern?</p>
       <p class="q-hint">Sowohl bei Mamafit als auch bei allen Somatic-Kursen ist es sinnvoll, 2 Termine zu schnuppern: Du (beim Mamafit auch Dein Baby) könnt euch beim ersten Mal erst einmal eingrooven, bevor es in der zweiten Stunde ums Entscheiden geht. Bei der somatischen Arbeit ist das Nervensystem beim ersten Mal oft etwas aufgeregt – viele können sich erst in der 2. Stunde wirklich einlassen. (kein Muss)</p>
       <div class="radio-group column" id="kurs-group">
@@ -451,7 +451,9 @@
         </label>
         <label class="r-option" onclick="selectRadio(event, this, 'kurs-group')">
           <input type="radio" name="kurs" value="mamafit_2termine" /><span class="r-dot"></span>Mamafit (2 Termine - 34€)
-        </label>          <input type="radio" name="kurs" value="mamafit_1termin" /><span class="r-dot"></span>Mamafit (1 Termin-17€)
+        </label>
+        <label class="r-option" onclick="selectRadio(event, this, 'kurs-group')">
+          <input type="radio" name="kurs" value="mamafit_1termin" /><span class="r-dot"></span>Mamafit (1 Termin - 17€)
         </label>
         <label class="r-option" onclick="selectRadio(event, this, 'kurs-group')">
           <input type="radio" name="kurs" value="somatic_koerpermitte_2termine" /><span class="r-dot"></span>Somatic Körpermitte & Beckenboden (2 Termine - 34€)
@@ -467,7 +469,6 @@
         </label>
       </div>
     </div>
-  </div>
 
   <hr class="divider" />
 
