@@ -553,6 +553,9 @@
           <input type="checkbox" name="consent" value="dsgvo" /><span class="c-dot"></span>Ich habe die <a href="https://www.bauch-baby-beckenboden.de/datenschutz/" target="_blank" style="color:var(--rose);text-decoration:underline;display:inline;">Datenschutzerklärung</a> gelesen und willige ein.
         </label>
         <label class="r-option" onclick="selectCheck(event, this)">
+          <input type="checkbox" name="consent" value="agb" /><span class="c-dot"></span>Ich habe die <a href="https://www.bauch-baby-beckenboden.de/agb/" target="_blank" style="color:var(--rose);text-decoration:underline;display:inline;">AGB</a> gelesen, insbesondere die Hinweise zu Verbindlichkeit der Buchung und Stornierung, und akzeptiere sie.
+        </label>
+        <label class="r-option" onclick="selectCheck(event, this)">
           <input type="checkbox" name="consent" value="notiz" /><span class="c-dot"></span>Ich bin damit einverstanden, dass meine Angaben in anonymisierter Form für die Stundenplanung genutzt werden
         </label>
         <label class="r-option" onclick="selectCheck(event, this)">
@@ -609,6 +612,8 @@
 
   // Checkboxes: explicitly toggle the input checked state and visual class
   function selectCheck(e, el) {
+    // Klick auf einen Link (z. B. AGB, Datenschutz) soll den Haken nicht umschalten
+    if (e && e.target && e.target.closest && e.target.closest('a')) return;
     if (e) e.preventDefault();
     const input = el.querySelector('input[type="checkbox"]');
     if (!input) return;
@@ -682,6 +687,7 @@
     if (!getValue('f-aufmerksam')) fehler.push('Wie bist Du auf mich aufmerksam geworden? (Abschnitt 4)');
     const consentChecked = Array.from(document.querySelectorAll('input[name="consent"]:checked')).map(i => i.value);
     if (!consentChecked.includes('dsgvo')) fehler.push('Datenschutzerklärung bestätigen (Abschnitt 5)');
+    if (!consentChecked.includes('agb')) fehler.push('AGB bestätigen (Abschnitt 5)');
     if (!consentChecked.includes('antirassismus')) fehler.push('Antirassismus-Bestätigung (Abschnitt 5)');
     if (fehler.length > 0) {
       alert('Bitte fülle noch folgende Pflichtfelder aus:\n\n• ' + fehler.join('\n• '));
