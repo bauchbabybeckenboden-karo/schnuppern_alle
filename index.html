@@ -1,759 +1,243 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fragebogen – Schnupperstunde</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script>emailjs.init("FBZv2NHZrCtRauTWD");</script>
-  <style>
-    :root {
-      --sand: #f7f2ee;
-      --clay: #c4a882;
-      --earth: #7a5c4a;
-      --deep: #5c2d2d;
-      --sage: #8a7060;
-      --rose: #b87060;
-      --mist: #ede5dc;
-      --ink: #2a1a1a;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      background-color: var(--sand);
-      font-family: 'Jost', sans-serif;
-      color: var(--ink);
-      min-height: 100vh;
-      padding: 0 0 80px;
-    }
-
-    /* Header */
-    .header {
-      background: #7a3f3f;
-      color: var(--sand);
-      padding: 50px 40px 44px;
-      position: relative;
-      overflow: hidden;
-    }
-    .header::before {
-      content: '';
-      position: absolute;
-      top: -60px; right: -60px;
-      width: 300px; height: 300px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(201,169,138,0.18) 0%, transparent 70%);
-    }
-    .header::after {
-      content: '';
-      position: absolute;
-      bottom: -40px; left: 30%;
-      width: 200px; height: 200px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(196,135,122,0.12) 0%, transparent 70%);
-    }
-    .header-inner {
-      max-width: 760px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 1;
-    }
-    .header-eyebrow {
-      font-family: 'Jost', sans-serif;
-      font-weight: 300;
-      font-size: 11px;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      color: var(--clay);
-      margin-bottom: 18px;
-    }
-    .header h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 300;
-      font-size: clamp(30px, 5vw, 46px);
-      line-height: 1.15;
-      color: var(--sand);
-      margin-bottom: 20px;
-    }
-    .header h1 em {
-      color: var(--clay);
-      font-style: italic;
-    }
-    .header-subtitle {
-      font-size: 14px;
-      font-weight: 300;
-      color: rgba(245,240,232,0.65);
-      max-width: 520px;
-      line-height: 1.7;
-    }
-
-    /* Logo */
-    .logo-wrap {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      margin-bottom: 32px;
-    }
-    .logo-img {
-      height: 76px;
-      width: auto;
-      flex-shrink: 0;
-    }
-    .logo-text {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-    .logo-main {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 18px;
-      font-weight: 400;
-      color: #fff;
-      letter-spacing: 0.5px;
-    }
-    .logo-sub {
-      font-family: 'Jost', sans-serif;
-      font-size: 11px;
-      font-weight: 300;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.55);
-    }
-
-    /* Safety notice */
-    .notice {
-      max-width: 760px;
-      margin: 36px auto 0;
-      padding: 0 24px;
-    }
-    .notice-box {
-      background: rgba(125,145,134,0.12);
-      border-left: 3px solid var(--sage);
-      border-radius: 0 8px 8px 0;
-      padding: 18px 22px;
-      font-size: 13px;
-      font-weight: 300;
-      color: var(--earth);
-      line-height: 1.7;
-    }
-    .notice-box strong {
-      font-weight: 500;
-      color: var(--sage);
-      display: block;
-      margin-bottom: 4px;
-      font-size: 12px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-    }
-
-    /* Form layout */
-    .form-wrap {
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-
-    /* Section */
-    .section {
-      margin-top: 48px;
-    }
-    .section-label {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 28px;
-    }
-    .section-num {
-      background: var(--deep);
-      color: var(--clay);
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 18px;
-      font-style: italic;
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    .section-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 400;
-      font-size: 22px;
-      color: var(--deep);
-    }
-
-    /* Question card */
-    .q-card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 24px 28px;
-      margin-bottom: 16px;
-      border: 1px solid var(--mist);
-      transition: border-color 0.2s;
-    }
-    .q-card:focus-within {
-      border-color: var(--clay);
-    }
-    .q-label {
-      font-size: 14px;
-      font-weight: 400;
-      color: var(--deep);
-      margin-bottom: 14px;
-      line-height: 1.6;
-    }
-    .q-hint {
-      font-size: 12px;
-      color: var(--earth);
-      font-weight: 300;
-      margin-top: -10px;
-      margin-bottom: 12px;
-      font-style: italic;
-    }
-
-    /* Radio / Checkbox group */
-    .radio-group, .check-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .radio-group.column, .check-group.column {
-      flex-direction: column;
-      gap: 8px;
-    }
-    .r-option {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 300;
-      color: var(--ink);
-      padding: 9px 16px;
-      border: 1.5px solid var(--mist);
-      border-radius: 100px;
-      background: var(--sand);
-      transition: all 0.15s;
-      user-select: none;
-    }
-    /* Accessible hidden input — keeps element in DOM flow for keyboard / screenreaders */
-    .r-option input {
-      position: absolute;
-      opacity: 0;
-      pointer-events: none;
-    }
-    .r-option:hover { border-color: var(--clay); background: #fdf9f5; }
-    .r-option.selected {
-      border-color: var(--clay);
-      background: rgba(201,169,138,0.15);
-      color: var(--deep);
-      font-weight: 400;
-    }
-    .r-dot {
-      width: 14px; height: 14px;
-      border-radius: 50%;
-      border: 1.5px solid var(--clay);
-      flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .r-option.selected .r-dot::after {
-      content: '';
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--clay);
-    }
-    .c-dot {
-      width: 14px; height: 14px;
-      border-radius: 3px;
-      border: 1.5px solid var(--clay);
-      flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .r-option.selected .c-dot {
-      background: var(--clay);
-    }
-    .r-option.selected .c-dot::after {
-      content: '✓';
-      color: #fff;
-      font-size: 9px;
-      line-height: 1;
-    }
-
-    /* Text input */
-    textarea, input[type="text"], input[type="email"], input[type="tel"], input[type="date"], input[type="number"] {
-      width: 100%;
-      font-family: 'Jost', sans-serif;
-      font-size: 14px;
-      font-weight: 300;
-      color: var(--ink);
-      background: var(--sand);
-      border: 1.5px solid var(--mist);
-      border-radius: 8px;
-      padding: 12px 16px;
-      resize: vertical;
-      outline: none;
-      transition: border-color 0.15s;
-    }
-    textarea:focus, input:focus {
-      border-color: var(--clay);
-    }
-    textarea { min-height: 80px; }
-
-    /* Inline date + text row */
-    .inline-row {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .inline-row > * { flex: 1; min-width: 140px; }
-
-    /* Divider */
-    .divider {
-      border: none;
-      border-top: 1px solid var(--mist);
-      margin: 52px 0 0;
-    }
-
-    /* Submit */
-    .submit-wrap {
-      max-width: 760px;
-      margin: 52px auto 0;
-      padding: 0 24px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 16px;
-    }
-    .submit-note {
-      font-size: 12px;
-      color: var(--earth);
-      font-weight: 300;
-      font-style: italic;
-      line-height: 1.6;
-    }
-    .btn-submit {
-      background: var(--deep);
-      color: var(--sand);
-      border: none;
-      padding: 16px 48px;
-      border-radius: 100px;
-      font-family: 'Jost', sans-serif;
-      font-size: 13px;
-      font-weight: 400;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-    }
-    .btn-submit:hover { background: var(--earth); }
-    .btn-submit:active { transform: scale(0.98); }
-    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
-
-    /* Thank you */
-    #thank-you {
-      display: none;
-      max-width: 760px;
-      margin: 60px auto;
-      padding: 0 24px;
-      text-align: center;
-    }
-    #thank-you .ty-icon {
-      font-size: 48px;
-      margin-bottom: 20px;
-    }
-    #thank-you h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 32px;
-      font-weight: 300;
-      color: var(--deep);
-      margin-bottom: 14px;
-    }
-    #thank-you p {
-      font-size: 15px;
-      font-weight: 300;
-      color: var(--earth);
-      line-height: 1.8;
-    }
-
-    @media (max-width: 560px) {
-      .header { padding: 40px 20px 36px; }
-      .q-card { padding: 18px 18px; }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Schnuppern</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --sand: #F6EBE8; --clay: #C4A0A0; --earth: #8B6464; --ink: #3D2B2B; --muted: #6d4f4f; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Jost', -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; background: #e8d5d0; color: var(--ink); line-height: 1.6; min-height: 100vh; padding-bottom: 40px; }
+  .header { background: var(--earth); color: var(--sand); padding: 36px 20px 32px; }
+  .header-inner { max-width: 560px; margin: 0 auto; }
+  .logo-wrap { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+  .logo-wrap img { width: 64px; height: 64px; object-fit: contain; }
+  .logo-main { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.2rem; font-weight: 600; display: block; }
+  .logo-sub { font-size: 0.8rem; font-weight: 300; letter-spacing: 0.08em; opacity: 0.85; display: block; }
+  .header h1 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 2rem; font-weight: 600; margin-bottom: 8px; }
+  .header p { font-weight: 300; }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 0 16px; }
+  .card { background: var(--sand); border: 1px solid var(--clay); border-radius: 14px; padding: 20px; margin: 16px 0; }
+  .card h2 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.4rem; color: var(--earth); margin-bottom: 10px; }
+  .kurs { display: flex; align-items: flex-start; gap: 12px; background: #fff; border: 1px solid var(--clay); border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; cursor: pointer; }
+  .kurs input, .termin input { width: 18px; height: 18px; accent-color: var(--earth); flex-shrink: 0; margin-top: 4px; }
+  .kurs.checked { border-color: var(--earth); background: var(--sand); }
+  .kurs small { display: block; color: var(--muted); font-size: 0.85rem; }
+  .termin { display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid var(--clay); border-radius: 10px; padding: 10px 14px; margin-bottom: 8px; cursor: pointer; }
+  .termin > span { flex: 1; }
+  .termin small { display: block; font-size: 0.8rem; color: var(--earth); font-style: italic; }
+  .termin.checked { border-color: var(--earth); background: var(--sand); }
+  .termin.disabled { opacity: 0.5; cursor: default; }
+  .nur-online { font-weight: 700; font-size: 1.2rem; color: var(--earth); margin-bottom: 10px; }
+  .hidden { display: none; }
+  .info { color: var(--muted); font-size: 0.95rem; }
+  .alt { margin-top: 14px; border-top: 1px dashed var(--clay); padding-top: 14px; }
+  .alt label { display: block; font-size: 0.95rem; color: var(--earth); margin-bottom: 6px; }
+  input[type=text], input[type=email], input[type=tel], textarea { width: 100%; font: inherit; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--clay); background: #fff; color: var(--ink); }
+  .felder { display: grid; gap: 10px; }
+  .felder label { font-size: 0.9rem; color: var(--muted); display: block; margin-bottom: 4px; }
+  button.primary { width: 100%; margin-top: 18px; padding: 14px; border: 0; border-radius: 999px; background: var(--earth); color: var(--sand); font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.2rem; font-weight: 600; cursor: pointer; }
+  button.primary:disabled { opacity: 0.45; cursor: default; }
+  .danke { text-align: center; color: var(--earth); font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.3rem; }
+  .hinweis { font-style: italic; color: var(--earth); font-size: 0.95rem; margin-bottom: 10px; }
+  .q { font-size: 0.95rem; color: var(--muted); margin: 16px 0 8px; }
+  .check { display: flex; align-items: flex-start; gap: 12px; background: #fff; border: 1px solid var(--clay); border-radius: 10px; padding: 10px 14px; margin-bottom: 8px; font-size: 0.95rem; cursor: pointer; }
+  .check input { width: 18px; height: 18px; accent-color: var(--earth); flex-shrink: 0; margin-top: 3px; }
+  .check a { color: var(--earth); text-decoration: underline; }
+</style>
 </head>
 <body>
 
 <header class="header">
   <div class="header-inner">
     <div class="logo-wrap">
-      <img src="logo.png" alt="Bauch · Baby · Beckenboden Logo" class="logo-img" />
-      <div class="logo-text">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFkAAACwCAYAAABkQMLlAAAWfmNhQlgAABZ+anVtYgAAAB5qdW1kYzJwYQARABCAAACqADibcQNjMnBhAAAAFlhqdW1iAAAAR2p1bWRjMm1hABEAEIAAAKoAOJtxA3VybjpjMnBhOjEyNTQyYWQyLTRjMGEtNGM5ZS05NjNkLWQ3MTY2Y2RlM2Q0MAAAAAOTanVtYgAAAClqdW1kYzJhcwARABCAAACqADibcQNjMnBhLmFzc2VydGlvbnMAAAAAuGp1bWIAAABEanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5pbmdyZWRpZW50LnYzAAAAABhjMnNohXHf9EYb4tei9jft/B+4kAAAAGxjYm9yo2lkYzpmb3JtYXRpaW1hZ2UvcG5namluc3RhbmNlSUR4LHhtcDppaWQ6NTVkNDcyNmMtYTVjNi00YmU4LWE5ZGItYzE3ZWMzODUyM2JmbHJlbGF0aW9uc2hpcGhwYXJlbnRPZgAAAeJqdW1iAAAAQWp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuYWN0aW9ucy52MgAAAAAYYzJzaKuLlIE3ORnyhaYgOjaPpIcAAAGZY2JvcqJnYWN0aW9uc4KiZmFjdGlvbmtjMnBhLm9wZW5lZGpwYXJhbWV0ZXJzoWtpbmdyZWRpZW50c4GiY3VybHgtc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5pbmdyZWRpZW50LnYzZGhhc2hYIBEJrnPrg7rvToCU8oOOJOnZgNaCGQWM9P5B9T5HgOh4pGZhY3Rpb254HWNvbS5hbnRocm9waWMuY2xhdWRlLnByb3ZpZGVkanBhcmFtZXRlcnOheB9jb20uYW50aHJvcGljLm9yaWdpbi1jb25maWRlbmNlZ3Vua25vd25rZGVzY3JpcHRpb254ZkNsYXVkZSBwcm92aWRlZCB0aGlzIGZpbGUgYXQgdGhlIHJlcXVlc3Qgb2YgYSB1c2VyIGFuZCBtYXkgaGF2ZSBjcmVhdGVkIG9yIG1vZGlmaWVkIHRoZSBmaWxlIGNvbnRlbnRzLm1zb2Z0d2FyZUFnZW50oWRuYW1lZkNsYXVkZXJhbGxBY3Rpb25zSW5jbHVkZWT1AAAAyGp1bWIAAABAanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5oYXNoLmRhdGEAAAAAGGMyc2i1zhLYOaeWx1sFjsJ0qbo5AAAAgGNib3KlY2FsZ2ZzaGEyNTZjcGFkTQAAAAAAAAAAAAAAAABkaGFzaFggDG2gToUQzW6BxfcCj8asBdYXVHfyh1QLc+c42nleMJ5kbmFtZW5qdW1iZiBtYW5pZmVzdGpleGNsdXNpb25zgaJlc3RhcnQYIWZsZW5ndGgZFooAAAI+anVtYgAAACdqdW1kYzJjbAARABCAAACqADibcQNjMnBhLmNsYWltLnYyAAAAAg9jYm9ypWNhbGdmc2hhMjU2aXNpZ25hdHVyZXhNc2VsZiNqdW1iZj0vYzJwYS91cm46YzJwYToxMjU0MmFkMi00YzBhLTRjOWUtOTYzZC1kNzE2NmNkZTNkNDAvYzJwYS5zaWduYXR1cmVqaW5zdGFuY2VJRHgseG1wOmlpZDo3MmMxNDg0MC1hNGQ4LTQ2ZTItYjYzOC1hMDYyYjUxYjAzYmJyY3JlYXRlZF9hc3NlcnRpb25zg6JjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFggEQmuc+uDuu9OgJTyg44k6dmA1oIZBYz0/kH1PkeA6HiiY3VybHgqc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5hY3Rpb25zLnYyZGhhc2hYIJY8cppu04qhrg+2S+tWxDg7BpmNXXRJlRbZbYJwe/oyomN1cmx4KXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaGFzaC5kYXRhZGhhc2hYICXk/SHc5rtbyhc64t8wtu5yAYrKYbVEzfdB8ohIOdwUdGNsYWltX2dlbmVyYXRvcl9pbmZvo2RuYW1lb0FudGhyb3BpYyBGaWxlc2d2ZXJzaW9uZTEuMC4wa3NwZWNWZXJzaW9uZTIuNC4wAAAQOGp1bWIAAAAoanVtZGMyY3MAEQAQgAAAqgA4m3EDYzJwYS5zaWduYXR1cmUAAAAQCGNib3LShFkCEqIBJhghWQIKMIICBjCCAY2gAwIBAgIUQOWgCu7COdC+uIP6BkIFPWdVEwAwCgYIKoZIzj0EAwMwSTEXMBUGA1UEChMOQW50aHJvcGljLCBQQkMxLjAsBgNVBAMTJUFudGhyb3BpYyBDb250ZW50IENyZWRlbnRpYWxzIFJvb3QgQ0EwHhcNMjYwODA3MTg0MzU2WhcNMjgwODA2MTk0MzU2WjBEMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEpMCcGA1UEAxMgQW50aHJvcGljIENsYXVkZSBDb250ZW50IFNpZ25pbmcwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAASYegpry1AYBRTVNL1CpTlbROnY3dey+UrsF9C3phYrATN3ZHf93Mo8RQN0KOUuOn19P4oWNFWe5n2/She9N7eTo1gwVjAOBgNVHQ8BAf8EBAMCB4AwFQYDVR0lBA4wDAYKKwYBBAGD6F4CATAMBgNVHRMBAf8EAjAAMB8GA1UdIwQYMBaAFM5R4gSBTmRbI/jjxM+aPpzB11zCMAoGCCqGSM49BAMDA2cAMGQCMDFzHRSeAXrSy1WOzkbhPZ6Km2wGTmZ/2gK18k8BQGXyqz88Rdrz6CTX9flAnYNVxgIwcF9c3fVhqmJKpi+UhasNUMko69cyX6STPfta3Q8EjyzDjzoyrol46FP6VFHhvUcJoWNwYWRZDZ4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA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" alt="Bauch · Baby · Beckenboden Logo">
+      <div>
         <span class="logo-main">Bauch · Baby · Beckenboden</span>
-        <span class="logo-sub">alle Kurse</span>
+        <span class="logo-sub">Schnuppern</span>
       </div>
     </div>
-    <p class="header-eyebrow">Vertraulicher Fragebogen</p>
-    <h1>Vielen Dank –<br><em>für dein Interesse an einer Schnupperstunde</em></h1>
-    <p class="header-subtitle">Hier kannst Du mich wissen lassen, in welchem Kurs du gerne schnuppern möchtest & wann es für Dich passt.</p>
+    <h1>Schnuppern</h1>
+    <p>Vielen Dank für Dein Interesse an meinen Kursen. Bitte wähle zuerst den Kurs, in dem Du schnuppern möchtest. Darunter siehst Du die passenden Termine. Schwangerfit kostet 17 € für 1 Termin. Mamafit und Somatic kosten 17 € für 1 Termin oder 34 € für 2 Termine.</p>
   </div>
 </header>
 
-<div class="notice">
-  <div class="notice-box">
-    <strong>Hinweis zur Sicherheit</strong>
-    Die Informationen, die Du mir hier gibst, werden nicht durch mich an Dritte weitergegeben.
-  </div>
-</div>
+<main class="wrap">
 
-<form id="main-form" class="form-wrap" onsubmit="handleSubmit(event)">
+  <section class="card" id="schritt-1">
+    <h2>1. Kurs wählen</h2>
+    <div id="kursliste"><p class="info">Termine werden geladen …</p></div>
+  </section>
 
-  <!-- ── SECTION 1: Persönliches ── -->
-  <div class="section">
-    <div class="section-label">
-      <div class="section-num">1</div>
-      <h2 class="section-title">Persönliche Angaben</h2>
+  <section class="card hidden" id="schritt-2">
+    <h2>2. Termin wählen</h2>
+    <p class="hinweis hidden" id="zweimal">‼️ Sowohl bei Mamafit als auch bei allen Somatic-Kursen ist es sinnvoll, 2 Termine zu schnuppern: Du (beim Mamafit auch Dein Baby) könnt euch beim ersten Mal erst einmal eingrooven, bevor es in der zweiten Stunde ums Entscheiden geht. Bei der somatischen Arbeit ist das Nervensystem beim ersten Mal oft etwas aufgeregt – viele können sich erst in der 2. Stunde wirklich einlassen. (kein Muss)</p>
+      <p class="info">Wähle alle Termine, die für Dich passen. Ich entscheide dann, welcher es wird.</p>
+    <div id="termine"></div>
+    <div class="alt">
+      <label for="frage">Dein Wunschtermin ist nicht dabei? Kontaktiere mich</label>
+      <textarea id="frage" rows="2" placeholder="Schreib mir, welcher Termin Dir passt"></textarea>
     </div>
+  </section>
 
-    <div class="q-card">
-      <p class="q-label">Dein Name? <span style="color:var(--rose)">*</span></p>
-      <input type="text" id="f-name" placeholder="Vor- & Nachname" />
+  <section class="card hidden" id="schritt-3">
+    <h2>3. Deine Angaben</h2>
+    <div class="felder">
+      <div><label for="name">Name</label><input id="name" type="text" placeholder="Vor- und Nachname"></div>
+      <div><label for="mail">E-Mail</label><input id="mail" type="email" placeholder="deine@mail.de"></div>
+      <div><label for="tel">Telefon (optional)</label><input id="tel" type="tel" placeholder="0151 …"></div>
     </div>
+    <p class="q">Ich bestätige, dass meine Angaben freiwillig gemacht werden und vertraulich behandelt werden. *</p>
+    <label class="check"><input type="checkbox" name="consent" value="dsgvo"><span>Ich habe die <a href="https://www.bauch-baby-beckenboden.de/datenschutz/">Datenschutzerklärung</a> gelesen und willige ein. *</span></label>
+    <label class="check"><input type="checkbox" name="consent" value="agb"><span>Ich habe die <a href="https://www.bauch-baby-beckenboden.de/agb/">AGB</a> gelesen, insbesondere die Hinweise zu Verbindlichkeit der Buchung und Stornierung, und akzeptiere sie. *</span></label>
+    <label class="check"><input type="checkbox" name="consent" value="notiz"><span>Ich bin damit einverstanden, dass meine Angaben in anonymisierter Form für die Stundenplanung genutzt werden</span></label>
+    <label class="check"><input type="checkbox" name="consent" value="antirassismus"><span>Mir ist bewusst, dass in den Kursen kein Platz für Rassismus und Ausgrenzung ist. *</span></label>
+    <p id="senden-fehler" class="info" style="color:#8B6464"></p>
+    <button class="primary" id="senden" disabled>Anfrage senden</button>
+  </section>
 
-    <div class="q-card">
-      <p class="q-label">Wie kann ich dich erreichen? <span style="color:var(--rose)">*</span></p>
-      <div class="inline-row" style="margin-bottom:12px">
-        <div>
-          <p style="font-size:12px;color:var(--earth);margin-bottom:6px;font-weight:300">E-Mail-Adresse <span style="color:var(--rose)">*</span></p>
-          <input type="email" id="f-email" placeholder="deine@email.de" />
-        </div>
-        <div>
-          <p style="font-size:12px;color:var(--earth);margin-bottom:6px;font-weight:300">Telefonnummer <span style="color:var(--rose)">*</span></p>
-          <input type="tel" id="f-telefon" placeholder="+49 …" />
-        </div>
-      </div>
-    </div>
-  </div>
+  <section class="card hidden" id="danke"><p class="danke">Danke! Deine Anfrage ist angekommen. Ich melde mich mit Deinem Termin.</p></section>
 
-  <hr class="divider" />
-
-  <!-- ── SECTION 2: Kursabfrage ── -->
-  <div class="section">
-    <div class="section-label">
-      <div class="section-num">2</div>
-      <h2 class="section-title">Kursabfrage</h2>
-    </div>
-
-      <div class="q-card">
-      <p class="q-label">In welchem der Kurse möchtest Du gern schnuppern?</p>
-      <p class="q-hint">Sowohl bei Mamafit als auch bei allen Somatic-Kursen ist es sinnvoll, 2 Termine zu schnuppern: Du (beim Mamafit auch Dein Baby) könnt euch beim ersten Mal erst einmal eingrooven, bevor es in der zweiten Stunde ums Entscheiden geht. Bei der somatischen Arbeit ist das Nervensystem beim ersten Mal oft etwas aufgeregt – viele können sich erst in der 2. Stunde wirklich einlassen. (kein Muss)</p>
-      <div class="radio-group column" id="kurs-group">
-        <label class="r-option" onclick="selectRadio(event, this, 'kurs-group')">
-          <input type="radio" name="kurs" value="schwangerfit" /><span class="r-dot"></span>Schwangerfit (17€)
-        </label>
-        <label class="r-option" onclick="selectRadio(event, this, 'kurs-group')">
-          <input type="radio" name="kurs" value="mamafit_2termine" /><span class="r-dot"></span>Mamafit (2 Termine - 34€)
-        </label>
-        <label class="r-option" onclick="selectRadio(event, this, 'kurs-group')">
-          <input type="radio" name="kurs" value="mamafit_1termin" /><span class="r-dot"></span>Mamafit (1 Termin - 17€)
-        </label>
-        <label class="r-option" onclick="selectRadio(event, this, 'kurs-group')">
-          <input type="radio" name="kurs" value="somatic_koerpermitte_2termine" /><span class="r-dot"></span>Somatic Körpermitte & Beckenboden (2 Termine - 34€)
-        </label>
-        <label class="r-option" onclick="selectRadio(event, this, 'kurs-group')">
-          <input type="radio" name="kurs" value="somatic_koerpermitte_1termin" /><span class="r-dot"></span>Somatic Körpermitte & Beckenboden (1 Termin - 17€)
-        </label>
-        <label class="r-option" onclick="selectRadio(event, this, 'kurs-group')">
-          <input type="radio" name="kurs" value="somatic_yoga_2termine" /><span class="r-dot"></span>Somatic Yoga (2 Termine - 34€)
-        </label>
-        <label class="r-option" onclick="selectRadio(event, this, 'kurs-group')">
-          <input type="radio" name="kurs" value="somatic_yoga_1termin" /><span class="r-dot"></span>Somatic Yoga (1 Termin - 17€)
-        </label>
-      </div>
-    </div>
-
-  <hr class="divider" />
-
-  <!-- ── SECTION 3: Terminfindung ── -->
-  <div class="section">
-    <div class="section-label">
-      <div class="section-num">3</div>
-      <h2 class="section-title">Terminfindung</h2>
-    </div>
-
-    <div class="q-card">
-      <p class="q-label">Wann passt es Dir? <span style="color:var(--rose)">*</span></p>
-      <p class="q-hint">Momentan finden die Kurse wie folgt statt: Schwangerfit montagabends; Mamafit freitags & evtl. donnerstagvormittags; Somatic Yoga donnerstagabends (nicht für Schwangere oder Mütter bis 6 Monate postnatal); Somatic Körpermitte & Beckenboden montagabends, ebenfalls ohne Kinder. In den hessischen Schulferien finden keine Kurse statt.</p>
-      <div class="radio-group column" id="termin-group">
-        <label class="r-option" onclick="selectRadio(event, this, 'termin-group')">
-          <input type="radio" name="termin" value="asap" /><span class="r-dot"></span>So schnell wie möglich (gerne spontan 🤗)
-        </label>
-        <label class="r-option" onclick="selectRadio(event, this, 'termin-group')">
-          <input type="radio" name="termin" value="2-4-wochen" /><span class="r-dot"></span>In den nächsten 2–4 Wochen
-        </label>
-        <label class="r-option" onclick="selectRadio(event, this, 'termin-group')">
-          <input type="radio" name="termin" value="4-6-wochen" /><span class="r-dot"></span>In den nächsten 4–6 Wochen
-        </label>
-        <label class="r-option" onclick="selectRadio(event, this, 'termin-group')">
-          <input type="radio" name="termin" value="flexibel" /><span class="r-dot"></span>Ich richte mich nach Dir
-        </label>
-      </div>
-    </div>
-
-    <div class="q-card">
-      <p class="q-label">Gibt es körperliche Probleme oder ein Sportverbot? (z. B. Symphysenschmerzen) <span style="color:var(--rose)">*</span></p>
-      <p class="q-hint">Falls Du diese Frage mit Ja beantwortest, nimm bitte vor unserer gemeinsamen Stunde gern Kontakt mit mir auf.</p>
-      <div class="radio-group" id="sportverbot-group">
-        <label class="r-option" onclick="selectRadio(event, this, 'sportverbot-group')">
-          <input type="radio" name="sportverbot" value="ja" /><span class="r-dot"></span>Ja
-        </label>
-        <label class="r-option" onclick="selectRadio(event, this, 'sportverbot-group')">
-          <input type="radio" name="sportverbot" value="nein" /><span class="r-dot"></span>Nein
-        </label>
-      </div>
-    </div>
-  </div>
-
-  <hr class="divider" />
-
-  <!-- ── SECTION 4: Über dich ── -->
-  <div class="section">
-    <div class="section-label">
-      <div class="section-num">4</div>
-      <h2 class="section-title">Über dich</h2>
-    </div>
-
-    <div class="q-card">
-      <p class="q-label">Welches Lied liebst Du? <span style="color:var(--rose)">*</span></p>
-      <input type="text" id="f-lied" placeholder="Titel und Künstler:in (oder einfach das, woran du gerade denkst)" />
-    </div>
-
-    <div class="q-card">
-      <p class="q-label">Wie bist Du auf mich aufmerksam geworden? <span style="color:var(--rose)">*</span></p>
-      <textarea id="f-aufmerksam" placeholder="z. B. Empfehlung, Instagram, Hebamme, Google …" style="min-height:60px"></textarea>
-    </div>
-
-    <div class="q-card">
-      <p class="q-label">Möchtest Du mir etwas mitteilen?</p>
-      <textarea id="f-wuensche" placeholder="Raum für alles, was dir wichtig ist …" style="min-height:110px"></textarea>
-    </div>
-  </div>
-
-  <hr class="divider" />
-
-  <!-- ── SECTION 5: Datenschutz ── -->
-  <div class="section">
-    <div class="section-label">
-      <div class="section-num">5</div>
-      <h2 class="section-title">Einverständnis</h2>
-    </div>
-
-    <div class="q-card">
-      <p class="q-label">Ich bestätige, dass meine Angaben freiwillig gemacht werden und vertraulich behandelt werden. <span style="color:var(--rose)">*</span></p>
-      <div class="check-group column" id="consent-group">
-        <label class="r-option" onclick="selectCheck(event, this)">
-          <input type="checkbox" name="consent" value="dsgvo" /><span class="c-dot"></span>Ich habe die <a href="https://www.bauch-baby-beckenboden.de/datenschutz/" target="_blank" style="color:var(--rose);text-decoration:underline;display:inline;">Datenschutzerklärung</a> gelesen und willige ein.
-        </label>
-        <label class="r-option" onclick="selectCheck(event, this)">
-          <input type="checkbox" name="consent" value="agb" /><span class="c-dot"></span>Ich habe die <a href="https://www.bauch-baby-beckenboden.de/agb/" target="_blank" style="color:var(--rose);text-decoration:underline;display:inline;">AGB</a> gelesen, insbesondere die Hinweise zu Verbindlichkeit der Buchung und Stornierung, und akzeptiere sie.
-        </label>
-        <label class="r-option" onclick="selectCheck(event, this)">
-          <input type="checkbox" name="consent" value="notiz" /><span class="c-dot"></span>Ich bin damit einverstanden, dass meine Angaben in anonymisierter Form für die Stundenplanung genutzt werden
-        </label>
-        <label class="r-option" onclick="selectCheck(event, this)">
-          <input type="checkbox" name="consent" value="antirassismus" /><span class="c-dot"></span>Mir ist bewusst, dass in den Kursen kein Platz für Rassismus und Ausgrenzung ist
-        </label>
-      </div>
-    </div>
-  </div>
-
-</form>
-
-<div class="submit-wrap">
-  <p class="submit-note">Deine Angaben werden vertraulich behandelt und nicht an Dritte weitergegeben.</p>
-  <button class="btn-submit" id="submit-btn" onclick="handleSubmit(event)">Fragebogen absenden</button>
-</div>
-
-<div id="thank-you">
-  <div class="ty-icon">🌿</div>
-  <h2>Herzlichen Dank.</h2>
-  <p style="margin-bottom:20px">Ich freue mich sehr auf unsere gemeinsame Zeit und darauf, dich auf deinem Weg zu begleiten.<br>Ich melde mich in Kürze bei dir.</p>
-  <p style="font-size:13px; color:var(--earth); font-style:italic; max-width:480px; margin:0 auto; line-height:1.85;">Bauch · Baby · Beckenboden ist ein liebevoller Raum, in dem Bewegung, Verbindung und Stärke zusammenkommen. 🤍</p>
-</div>
+</main>
 
 <script>
-  // ── Supabase config ──
-  const SUPABASE_URL = 'https://lmeegdgilhlqvvmjaplz.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_GfKiifprgerRP37B9-VHiQ_3kl_6T6M';
+  // Öffentlicher Schlüssel (publishable) - nur Lesezugriff auf kurse + Belegungsfunktion.
+  // Web-App-URL aus Apps Script (Bereitstellung, endet auf /exec)
+  const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwo_MNjNYzVM_rbXd6oWMup6NC63yhMA1n7C5dPErj0tg0CW5Ewktx6YPSaRGnZOZyoXg/exec';
+  const SUPA_URL = 'https://qrfpaebkbwuadllucrvv.supabase.co';
+  const SUPA_KEY = 'sb_publishable_oyD3G4VXC6LLxqvvm9Tt9g_Rg_Yl2X6';
 
-  // Netlify-Function-Endpunkt fuer den Mailversand
-  // (Resend-Key liegt sicher in den Netlify Environment Variables)
-  const NOTIFY_ENDPOINT = '/.netlify/functions/send-notification';
+  // Hessische Schulferien (wie in der Kursabfrage), Start und Ende jeweils inklusive
+  const FERIEN = [
+    ['2026-10-05','2026-10-17'],['2026-12-23','2027-01-12'],['2027-03-22','2027-04-02'],['2027-06-28','2027-08-06'],
+    ['2027-10-04','2027-10-16'],['2027-12-23','2028-01-11'],['2028-04-03','2028-04-14'],['2028-07-03','2028-08-11'],
+    ['2028-10-09','2028-10-20'],['2028-12-27','2029-01-12'],['2029-03-29','2029-04-13'],['2029-07-16','2029-08-24'],
+    ['2029-10-15','2029-10-26'],['2029-12-24','2030-01-11'],['2030-04-08','2030-04-22'],['2030-07-22','2030-08-30'],
+  ];
 
-  // Anzeigenamen fuer die Kurswahl (fuer die Bestaetigungsmail an die Teilnehmerin)
-  const KURS_NAMEN = {
-    schwangerfit: 'Schwangerfit',
-    mamafit_2termine: 'Mamafit (2 Termine)',
-    mamafit_1termin: 'Mamafit (1 Termin)',
-    somatic_koerpermitte_2termine: 'Somatic Körpermitte & Beckenboden (2 Termine)',
-    somatic_koerpermitte_1termin: 'Somatic Körpermitte & Beckenboden (1 Termin)',
-    somatic_yoga_2termine: 'Somatic Yoga (2 Termine)',
-    somatic_yoga_1termin: 'Somatic Yoga (1 Termin)',
-  };
+  const kursliste = document.getElementById('kursliste');
+  const terminBox = document.getElementById('termine');
+  const frage = document.getElementById('frage');
+  const senden = document.getElementById('senden');
+  const name = document.getElementById('name');
+  const mail = document.getElementById('mail');
+  const tel = document.getElementById('tel');
+  let kurse = [];
+  let gewaehlt = null;
 
-  // ── Selection logic ──
-  // Radios: explicitly set the input checked state and visual class
-  function selectRadio(e, el, groupId) {
-    if (e) e.preventDefault();
-    const input = el.querySelector('input[type="radio"]');
-    if (!input) return;
-    document.querySelectorAll('#' + groupId + ' .r-option').forEach(o => o.classList.remove('selected'));
-    input.checked = true;
-    el.classList.add('selected');
+  const heute = (() => { const d = new Date(); return [d.getFullYear(), String(d.getMonth()+1).padStart(2,'0'), String(d.getDate()).padStart(2,'0')].join('-'); })();
+
+  const slug = s => s.trim().toLowerCase().replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  const istFerien = d => FERIEN.some(([a,b]) => d >= a && d <= b);
+  const label = iso => { const [y,m,t] = iso.split('-').map(Number); return new Date(y, m-1, t).toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }); };
+
+  async function laden() {
+    const headers = { apikey: SUPA_KEY, 'Content-Type': 'application/json' };
+    const [kRes, bRes] = await Promise.all([
+      fetch(`${SUPA_URL}/rest/v1/kurse?select=id,name,course_type,ist_online,max_teilnehmerinnen,uhrzeit,termin_daten,ausgefallen_daten,sichtbar_auf_website,end_datum&sichtbar_auf_website=eq.true&end_datum=gte.${heute}`, { headers }),
+      fetch(`${SUPA_URL}/rest/v1/rpc/kurs_belegung`, { method: 'POST', headers, body: '{}' }),
+    ]);
+    if (!kRes.ok || !bRes.ok) throw new Error('laden fehlgeschlagen');
+    const belegung = {};
+    (await bRes.json()).forEach(r => belegung[r.kurs_id] = r.anzahl_buchungen);
+    return { kurse: await kRes.json(), belegung };
   }
 
-  // Checkboxes: explicitly toggle the input checked state and visual class
-  function selectCheck(e, el) {
-    // Klick auf einen Link (z. B. AGB, Datenschutz) soll den Haken nicht umschalten
-    if (e && e.target && e.target.closest && e.target.closest('a')) return;
-    if (e) e.preventDefault();
-    const input = el.querySelector('input[type="checkbox"]');
-    if (!input) return;
-    input.checked = !input.checked;
-    el.classList.toggle('selected', input.checked);
+  // Die nächsten 6 stattfindenden Termine einer Kursrunde
+  function termineVon(k) {
+    const ausfall = new Set(k.ausgefallen_daten || []);
+    const original = [...(k.termin_daten || [])].sort();
+    const letzter = original[original.length - 1];
+    const liste = original.filter(d => d >= heute && !ausfall.has(d) && !istFerien(d)).slice(0, 6);
+    return liste.map(d => ({ iso: d, text: label(d), letzte: d === letzter }));
   }
 
-  // ── Submit ──
-  function getValue(id) {
-    const el = document.getElementById(id);
-    return el ? el.value.trim() : '';
-  }
+  function aufbauen({ kurse: alle, belegung }) {
+    const physisch = alle.filter(k => !k.ist_online);
+    const online = alle.filter(k => k.ist_online);
+    kurse = physisch.map(k => {
+      const twin = online.find(o => o.course_type === k.course_type && (o.termin_daten || []).join() === (k.termin_daten || []).join());
+      const voll = (belegung[k.id] || 0) >= k.max_teilnehmerinnen;
+      const weekday = k.termin_daten && k.termin_daten.length ? new Date(...k.termin_daten[0].split('-').map((v,i) => i === 1 ? v-1 : +v)).toLocaleDateString('de-DE', { weekday: 'long' }) : '';
+      return { slug: slug(k.name), name: k.name.trim(), info: `${weekday} · ${(k.uhrzeit || '').slice(0,5)} Uhr · vor Ort · ${/schwanger/i.test(k.name) ? '17 € für 1 Termin' : '17 € für 1 Termin · 34 € für 2 Termine'}`, voll, online: !!twin, twinVoll: twin ? (belegung[twin.id] || 0) >= twin.max_teilnehmerinnen : true, termine: termineVon(k) };
+    }).filter(k => k.termine.length > 0 || k.voll);
 
-  function getRadio(name) {
-    const el = document.querySelector('input[name="' + name + '"]:checked');
-    return el ? el.value : '';
-  }
-
-  function getChecked(name) {
-    return Array.from(document.querySelectorAll('input[name="' + name + '"]:checked'))
-      .map(i => i.value)
-      .join(', ');
-  }
-
-  async function saveToSupabase(data) {
-    return fetch(SUPABASE_URL + '/rest/v1/fragebogen_antworten', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': SUPABASE_KEY,
-        'Authorization': 'Bearer ' + SUPABASE_KEY,
-        'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify(data)
+    kursliste.innerHTML = '';
+    kurse.forEach(k => {
+      const l = document.createElement('label');
+      l.className = 'kurs';
+      l.innerHTML = `<input type="radio" name="kurs" value="${k.slug}"><span>${k.name}<small>${k.info}</small></span>`;
+      kursliste.appendChild(l);
     });
+
+    const vorwahl = new URLSearchParams(location.search).get('kurs');
+    if (vorwahl) {
+      const radio = kursliste.querySelector(`input[value="${vorwahl}"]`);
+      if (radio) { radio.checked = true; radio.dispatchEvent(new Event('change', { bubbles: true })); }
+    }
   }
 
-  // Mail an Karoline ueber die Netlify Function ausloesen.
-  // Fehler werden geloggt aber nicht dem User angezeigt: die Antwort
-  // ist in Supabase gespeichert, das ist die Quelle der Wahrheit.
-  async function sendNotification(data) {
+  kursliste.addEventListener('change', e => {
+    if (!e.target.name) return;
+    gewaehlt = kurse.find(k => k.slug === e.target.value);
+    kursliste.querySelectorAll('.kurs').forEach(l => l.classList.toggle('checked', l.querySelector('input').checked));
+    zeigeTermine(gewaehlt);
+    document.getElementById('zweimal').classList.toggle('hidden', !/mamafit|somatic/i.test(gewaehlt.name));
+    document.getElementById('schritt-2').classList.remove('hidden');
+    document.getElementById('schritt-3').classList.remove('hidden');
+    pruefen();
+  });
+
+  function zeigeTermine(k) {
+    const onlineFrei = k.voll && k.online && !k.twinVoll;
+    let html = '';
+    if (onlineFrei) html += '<p class="nur-online">Zurzeit nur online.</p>';
+    if (k.termine.length === 0) html += '<p class="info">Aktuell sind keine Termine eingetragen.</p>';
+    k.termine.forEach(t => {
+      const hinweis = t.letzte ? '<small>voraussichtlich letzte Kursstunde</small>' : '';
+      if (k.voll && !onlineFrei) html += `<label class="termin disabled"><input type="checkbox" disabled><span>${t.text}${hinweis}</span></label>`;
+      else html += `<label class="termin"><input type="checkbox" name="wunsch" value="${t.iso}" data-online="${onlineFrei ? '1' : ''}"><span>${t.text}${onlineFrei ? ' <strong>(online)</strong>' : ''}${hinweis}</span></label>`;
+    });
+    terminBox.innerHTML = html;
+  }
+
+  terminBox.addEventListener('change', e => {
+    if (e.target.name === 'wunsch') { e.target.closest('.termin').classList.toggle('checked', e.target.checked); pruefen(); }
+  });
+
+  function pruefen() {
+    const ausgewaehlt = terminBox.querySelectorAll('input[name="wunsch"]:checked').length > 0 || frage.value.trim().length > 0;
+    const pflicht = ['dsgvo', 'agb', 'antirassismus'].every(v => document.querySelector(`input[name="consent"][value="${v}"]`).checked);
+    senden.disabled = !(gewaehlt && ausgewaehlt && name.value.trim() && mail.value.includes('@') && pflicht);
+  }
+  [frage, name, mail].forEach(f => f.addEventListener('input', pruefen));
+  document.querySelectorAll('input[name="consent"]').forEach(c => c.addEventListener('change', pruefen));
+
+  senden.addEventListener('click', async () => {
+    senden.disabled = true;
+    const termine = [...terminBox.querySelectorAll('input[name="wunsch"]:checked')].map(i => i.value);
+    const consent = {};
+    document.querySelectorAll('input[name="consent"]').forEach(c => consent[c.value] = c.checked);
+    const online = [...terminBox.querySelectorAll('input[name="wunsch"]:checked')].filter(i => i.dataset.online === '1').map(i => i.value);
+    const body = { quelle: 'schnupper', onlineTermine: online, name: name.value.trim(), email: mail.value.trim(), telefon: tel.value.trim(), kurs: gewaehlt.name, termine, frage: frage.value.trim(), consent };
     try {
-      const res = await fetch(NOTIFY_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-      if (!res.ok) {
-        const err = await res.text();
-        console.warn('Mail-Versand fehlgeschlagen:', err);
-      }
-    } catch (err) {
-      console.warn('Mail-Versand-Netzwerkfehler:', err);
+      const r = await fetch(WEBAPP_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) });
+      const j = await r.json();
+      if (!j.ok) throw new Error(j.fehler || 'Fehler');
+      ['schritt-1','schritt-2','schritt-3'].forEach(id => document.getElementById(id).classList.add('hidden'));
+      document.getElementById('danke').classList.remove('hidden');
+    } catch (e) {
+      senden.disabled = false;
+      document.getElementById('senden-fehler').textContent = 'Die Anfrage konnte gerade nicht gesendet werden. Bitte versuch es noch einmal.';
     }
-  }
+  });
 
-  async function handleSubmit(e) {
-    if (e) e.preventDefault();
-
-    const btn = document.getElementById('submit-btn');
-    btn.disabled = true;
-
-    // ── Pflichtfeld-Validierung ──
-    const fehler = [];
-    if (!getValue('f-name')) fehler.push('Dein Name (Abschnitt 1)');
-    if (!getValue('f-email')) fehler.push('E-Mail-Adresse (Abschnitt 1)');
-    if (!getValue('f-telefon')) fehler.push('Telefonnummer (Abschnitt 1)');
-    if (!getRadio('termin')) fehler.push('Terminwunsch (Abschnitt 3)');
-    if (!getRadio('sportverbot')) fehler.push('Frage zu körperlichen Problemen / Sportverbot (Abschnitt 3)');
-    if (!getValue('f-lied')) fehler.push('Lieblingslied (Abschnitt 4)');
-    if (!getValue('f-aufmerksam')) fehler.push('Wie bist Du auf mich aufmerksam geworden? (Abschnitt 4)');
-    const consentChecked = Array.from(document.querySelectorAll('input[name="consent"]:checked')).map(i => i.value);
-    if (!consentChecked.includes('dsgvo')) fehler.push('Datenschutzerklärung bestätigen (Abschnitt 5)');
-    if (!consentChecked.includes('agb')) fehler.push('AGB bestätigen (Abschnitt 5)');
-    if (!consentChecked.includes('antirassismus')) fehler.push('Antirassismus-Bestätigung (Abschnitt 5)');
-    if (fehler.length > 0) {
-      alert('Bitte fülle noch folgende Pflichtfelder aus:\n\n• ' + fehler.join('\n• '));
-      btn.disabled = false;
-      return;
-    }
-
-    // Felder, die bereits als Spalten in der geteilten Supabase-Tabelle
-    // "fragebogen_antworten" existieren (wird auch von anderen
-    // Fragebogen-Varianten genutzt). Spalten, die fuer den
-    // Schnupperbogen nicht zutreffen, bleiben hier bewusst leer.
-    const supabaseData = {
-      eingereicht_am: new Date().toISOString(),
-      name: getValue('f-name'),
-      email: getValue('f-email'),
-      telefon: getValue('f-telefon'),
-      motivation: '',
-      beschwerden: '',
-      medikamente: '',
-      becken_beschwerden: '',
-      entbunden: '',
-      wuensche: getValue('f-wuensche'),
-      einverstaendnis: getChecked('consent')
-    };
-
-    // Schnupperbogen-spezifische Felder: gehen nur an die Mail, NICHT an
-    // Supabase, weil dafuer noch keine eigenen Spalten existieren.
-    const schnupperExtras = {
-      kurs: getRadio('kurs'),
-      termin: getRadio('termin'),
-      sportverbot: getRadio('sportverbot'),
-      lied: getValue('f-lied'),
-      aufmerksam_geworden: getValue('f-aufmerksam')
-    };
-
-    try {
-      const res = await saveToSupabase(supabaseData);
-      if (res.ok || res.status === 201) {
-        // Mail bekommt alle Felder plus den Fragebogen-Typ.
-        await sendNotification({ ...supabaseData, ...schnupperExtras, fragebogen_typ: 'schnupperbogen' });
-
-        // Automatische Bestätigungsmail an die Teilnehmerin (alle Kurse).
-        await emailjs.send('service_lziomtl', 'template_e4gfpzp', {
-          to_name: supabaseData.name,
-          email: supabaseData.email,
-          umfrage_titel: KURS_NAMEN[schnupperExtras.kurs] || 'Schnupperstunde'
-        }).then(() => console.log('EmailJS OK')).catch(err => console.error('EmailJS Fehler:', JSON.stringify(err)));
-
-        document.getElementById('main-form').style.display = 'none';
-        document.querySelector('.submit-wrap').style.display = 'none';
-        document.querySelector('.notice').style.display = 'none';
-        document.getElementById('thank-you').style.display = 'block';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        const err = await res.text();
-        console.error('Supabase Fehler:', err);
-        alert('Es gab einen Fehler beim Speichern. Bitte versuche es erneut.');
-        btn.disabled = false;
-      }
-    } catch (err) {
-      console.error('Netzwerkfehler:', err);
-      alert('Verbindungsfehler. Bitte prüfe deine Internetverbindung und versuche es erneut.');
-      btn.disabled = false;
-    }
-  }
+  laden().then(aufbauen).catch(() => {
+    kursliste.innerHTML = '<p class="info">Die Termine können gerade nicht geladen werden. Schreib mir gern eine Nachricht, dann finden wir einen Termin.</p>';
+  });
 </script>
-
 </body>
 </html>
